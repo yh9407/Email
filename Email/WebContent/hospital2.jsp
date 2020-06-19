@@ -7,10 +7,13 @@
 <%@page import="java.sql.PreparedStatement"%>
 <%@page import="java.sql.DriverManager"%>
 <%@page import="java.sql.Connection"%>
-<%@ page language="java" contentType="application/json; charset=EUC-KR"
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
 	pageEncoding="EUC-KR"%>
 
 <%
+
+response.setHeader("Access-Control-Allow-Origin","*");
+
 	String area = request.getParameter("area");
 if (area == null)
 	area = "";
@@ -24,7 +27,7 @@ String pw = "1234";
 Connection con = DriverManager.getConnection(url, id, pw);
 
 StringBuffer query = new StringBuffer();
-query.append("SELECT ID, SIDO, NAME, MEDICAL");
+query.append("SELECT ID, SIDO, NAME, MEDICAL, LAT , LNG");
 query.append("     , ROOM, TEL, ADDRESS");
 query.append(" FROM HOSPITAL");
 query.append(" WHERE ADDRESS LIKE CONCAT('%', ?, '%')");
@@ -48,6 +51,9 @@ while (rs.next()) {
 	String room = rs.getString("ROOM");
 	String tel = rs.getString("TEL");
 	String address = rs.getString("ADDRESS");
+	String lat = rs.getString("LAT");
+	String lng = rs.getString("LNG");
+
 	
 	map.put("id", id2 + "") ;
 	map.put("sido", sido);
@@ -56,6 +62,8 @@ while (rs.next()) {
 	map.put("room", room);
 	map.put("tel", tel);
 	map.put("address", address);
+	map.put("lat", lat);
+	map.put("lng", lng);
 	//맵에 변수들 넣음
 	
 	list.add(map);
